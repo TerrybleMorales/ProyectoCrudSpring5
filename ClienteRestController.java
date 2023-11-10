@@ -168,4 +168,20 @@ public class ClienteRestController {
 		response.put("mensaje", "El cliente ha ido eliminado con éxito!");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
+
+	  @PostMapping("/test")
+    public ResponseEntity<?> createTest(@RequestBody @Valid Cliente cliente,
+                                   BindingResult result) {
+        Map<String, Object> response = new HashMap<>();
+
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors().stream()
+                    .map(err ->  "El campo '" + err.getField() + "' "+ err.getDefaultMessage())
+                    .collect(Collectors.toList());
+            response.put("errors", errors);
+
+            return ResponseEntity.badRequest().body(response);
+        }
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
 }
